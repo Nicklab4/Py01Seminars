@@ -101,6 +101,33 @@ def WriteFile(fileName, list1):
         fWriter.writeheader()               # Записываем заголовок
         fWriter.writerows(res)              # передаём в файл список со словарями
 
+def CopyFile(fileName, numberRow):         #
+    res = ReadFile(fileName)                # Читаем файл в res
+    if numberRow > len(res):              # проверяем есть ли такая строка
+        print('Нет такой строки в файле')
+        return
+    # print(res)
+    temp = list()
+    temp.append(res.pop(numberRow-1))           # в переменную темп Вырезаем искомое значение
+    # print(temp)
+
+    # Записываем изменения
+    with open(fileName, 'w', encoding='utf-8', newline='') as data:
+        fWriter = DictWriter(data, fieldnames=['Имя', 'Фамилия', 'Телефон'])
+        fWriter.writeheader()               # Записываем заголовок
+        fWriter.writerows(res)              # передаём в файл список со словарями
+
+    #Записываем второй файл
+    with open("NewfileName.csv", 'w', encoding='utf-8', newline='') as data2:
+        fWriter = DictWriter(data2, fieldnames=['Имя', 'Фамилия', 'Телефон'])
+        fWriter.writeheader()               # Записываем заголовок
+        fWriter.writerows(temp)              # передаём в файл список со словарями
+
+
+
+
+
+
 
 fileName = 'phone.csv'
 
@@ -121,6 +148,14 @@ def main():
                 print('файл отсутствует')   # Если нет - возвращаемся в главное меню
                 continue
             print(*ReadFile(fileName))
+
+        elif command == 'c':                # Копирование данных
+            if not exists(fileName):        # Проверка наличия файла
+                print('файл отсутствует')   # Если нет - возвращаемся в главное меню
+                continue
+            numberRow = int(input('Введите номер строки для копирования: '))
+            CopyFile(fileName, numberRow)
+
 
 
 main()
